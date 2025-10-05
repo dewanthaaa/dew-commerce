@@ -2,6 +2,9 @@ import { Inter } from "next/font/google";
 import type { Metadata } from "next";
 import "../../../globals.css";
 
+import Header from "./_components/header";
+import Sidebar from "./_components/sidebar";
+
 const inter = Inter({
   subsets: ["latin"],
   variable: "--font-inter",
@@ -29,7 +32,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} antialiased`}>{children}</body>
+      <body className={`${inter.variable} antialiased`}>
+        <div className="flex min-h-screen w-full flex-col bg-muted/40">
+          <Sidebar />
+          <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
+            <Header />
+            <main className="p-4">{children}</main>
+          </div>
+        </div>
+      </body>
     </html>
   );
 }
