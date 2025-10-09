@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
-import { postCategory, updateCategory } from "../categories/lib/actions";
+import { postCategory, updateCategory } from "../lib/actions";
 import { AlertCircle } from "lucide-react";
 import { Category } from "@/generated/prisma";
 // import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";

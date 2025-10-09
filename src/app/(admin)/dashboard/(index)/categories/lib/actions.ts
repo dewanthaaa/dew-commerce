@@ -71,3 +71,24 @@ export async function updateCategory(
   }
   return redirect("/dashboard/categories");
 }
+
+export async function deleteCategory(
+  _: unknown,
+  formData: FormData,
+  id: number
+): Promise<ActionResult> {
+  try {
+    await prisma.category.delete({
+      where: {
+        id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed To Delete Data",
+    };
+  }
+
+  return redirect("/dashboard/categories");
+}

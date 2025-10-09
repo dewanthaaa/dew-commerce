@@ -4,7 +4,8 @@ import Link from "next/link";
 import { Category } from "@/generated/prisma";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Edit, Trash } from "lucide-react";
+import { Edit } from "lucide-react";
+import FormDelete from "./_components/form-delete";
 
 export const columns: ColumnDef<Category>[] = [
   {
@@ -17,17 +18,14 @@ export const columns: ColumnDef<Category>[] = [
       const category = row.original;
 
       return (
-        <div className="space-x-4">
+        <div className="space-x-4 inline-flex">
           <Button size="sm" asChild>
             <Link href={`/dashboard/categories/edit/${category.id}`}>
               <Edit className="w-4 h-4 mr-2" />
               Edit
             </Link>
           </Button>
-          <Button variant="destructive" size="sm">
-            <Trash className="w-4 h-4 mr-2" />
-            Delete
-          </Button>
+          <FormDelete id={category.id} />
         </div>
       );
     },
