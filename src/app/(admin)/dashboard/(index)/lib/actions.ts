@@ -1,5 +1,4 @@
 "use server";
-
 import { getUser, lucia } from "@/lib/auth";
 import { ActionResult } from "@/types";
 import { cookies } from "next/headers";
