@@ -12,7 +12,7 @@ import { PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
-import getCategories from "./lib/data";
+import { getCategories } from "./lib/data";
 
 export default async function CategoriesPage() {
   const data = await getCategories();

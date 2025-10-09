@@ -25,8 +25,49 @@ export async function postCategory(
     });
   } catch (error) {
     console.log(error);
-    return redirect("/dashboard/categories/create");
+    return {
+      error: "Failed To Update Data",
+    };
   }
 
+  return redirect("/dashboard/categories");
+}
+
+export async function updateCategory(
+  _: unknown,
+  formData: FormData,
+  id: number | undefined
+): Promise<ActionResult> {
+  const validate = schemaCategory.safeParse({
+    name: formData.get("name"),
+  });
+
+  if (!validate.success) {
+    return {
+      error: validate.error.issues[0].message,
+    };
+  }
+
+  if (id === undefined) {
+    return {
+      error: "Category Id Not Found",
+    };
+  }
+
+  try {
+    await prisma.category.update({
+      where: {
+        id: id,
+      },
+      data: {
+        name: validate.data.name,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed To Update Data",
+    };
+  }
   return redirect("/dashboard/categories");
 }

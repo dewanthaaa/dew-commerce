@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { Category } from "@/generated/prisma";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,13 @@ export const columns: ColumnDef<Category>[] = [
     cell: ({ row }) => {
       const category = row.original;
 
-      console.log(category);
-
       return (
         <div className="space-x-4">
-          <Button size="sm">
-            <Edit className="w-4 h-4 mr-2" />
-            Edit
+          <Button size="sm" asChild>
+            <Link href={`/dashboard/categories/edit/${category.id}`}>
+              <Edit className="w-4 h-4 mr-2" />
+              Edit
+            </Link>
           </Button>
           <Button variant="destructive" size="sm">
             <Trash className="w-4 h-4 mr-2" />

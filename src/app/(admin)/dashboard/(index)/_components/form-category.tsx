@@ -17,26 +17,41 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
-import { postCategory } from "../categories/lib/actions";
+import { postCategory, updateCategory } from "../categories/lib/actions";
 import { AlertCircle } from "lucide-react";
+import { Category } from "@/generated/prisma";
 // import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const initialState: ActionResult = {
   error: "",
 };
 
-export default function FormCategory() {
-  const [state, formAction] = useFormState(postCategory, initialState);
+interface FormCategoryProps {
+  type?: "ADD" | "EDIT";
+  data?: Category | null;
+}
 
-  function SubmitButton() {
-    const { pending } = useFormStatus();
+function SubmitButton() {
+  const { pending } = useFormStatus();
 
-    return (
-      <Button type="submit" size="sm" disabled={pending}>
-        {pending ? "Loading..." : "Save Category"}
-      </Button>
-    );
-  }
+  return (
+    <Button type="submit" size="sm" disabled={pending}>
+      {pending ? "Loading..." : "Save Category"}
+    </Button>
+  );
+}
+
+export default function FormCategory({
+  data = null,
+  type = "ADD",
+}: FormCategoryProps) {
+  const updateCategoryWithId = (_: unknown, formData: FormData) =>
+    updateCategory(_, formData, data?.id);
+
+  const [state, formAction] = useFormState(
+    type === "ADD" ? postCategory : updateCategoryWithId,
+    initialState
+  );
 
   return (
     <form action={formAction}>
@@ -88,6 +103,7 @@ export default function FormCategory() {
                         name="name"
                         type="text"
                         className="w-full"
+                        defaultValue={data?.name}
                       />
                     </div>
                     {/* <div className="grid gap-3">
