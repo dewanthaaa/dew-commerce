@@ -1,6 +1,6 @@
 import React from "react";
-import FormCategory from "../_components/form-category";
+import FormLocation from "../_components/form-location";
 
 export default function CreatePage() {
-  return <FormCategory />;
+  return <FormLocation />;
 }

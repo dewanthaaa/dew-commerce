@@ -19,16 +19,16 @@ import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
 import { postLocation, updateLocation } from "../lib/actions";
 import { AlertCircle } from "lucide-react";
-import { Category } from "@/generated/prisma";
+import { Location } from "@/generated/prisma";
 // import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const initialState: ActionResult = {
   error: "",
 };
 
-interface FormCategoryProps {
+interface FormLocationProps {
   type?: "ADD" | "EDIT";
-  data?: Category | null;
+  data?: Location | null;
 }
 
 function SubmitButton() {
@@ -41,10 +41,10 @@ function SubmitButton() {
   );
 }
 
-export default function FormCategory({
+export default function FormLocation({
   data = null,
   type = "ADD",
-}: FormCategoryProps) {
+}: FormLocationProps) {
   const updateLocationWithId = (_: unknown, formData: FormData) =>
     updateLocation(_, formData, data?.id);
 
@@ -331,7 +331,7 @@ export default function FormCategory({
             <Button variant="outline" size="sm">
               Discard
             </Button>
-            <Button size="sm">Save Product</Button>
+            <Button size="sm">Save Location</Button>
           </div>
         </div>
       </div>

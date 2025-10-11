@@ -1,7 +1,7 @@
 import React from "react";
 import { getLocationById } from "../../lib/data";
 import { redirect } from "next/navigation";
-import FormCategory from "../../_components/form-category";
+import FormLocation from "../../_components/form-location";
 
 type Tparams = {
   id: string;
@@ -19,5 +19,5 @@ export default async function EditPage({ params }: EditPageProp) {
   }
   console.log(data);
 
-  return <FormCategory type="EDIT" data={data} />;
+  return <FormLocation type="EDIT" data={data} />;
 }
