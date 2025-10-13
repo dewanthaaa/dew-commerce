@@ -14,7 +14,7 @@ import { DataTable } from "@/components/ui/data-table";
 import { getBrands } from "./lib/data";
 
 export default async function BrandsPage() {
-  const data = await getBrands();
+  const brands = await getBrands();
 
   return (
     <div className="space-y-4">
@@ -23,7 +23,7 @@ export default async function BrandsPage() {
           <Link href="/dashboard/brands/create">
             <PlusCircle className="h-3.5 w-3.5" />
             <span className="sr-only sm:not-sr-only sm:whitespace-nowrap">
-              Add Brands
+              Add Brand
             </span>
           </Link>
         </Button>
@@ -36,7 +36,7 @@ export default async function BrandsPage() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={data}></DataTable>
+          <DataTable columns={columns} data={brands}></DataTable>
         </CardContent>
       </Card>
     </div>

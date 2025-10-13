@@ -17,13 +17,14 @@ export const columns: ColumnDef<Brand>[] = [
       const brand = row.original;
 
       return (
-        <div className="inline-flex">
+        <div className="inline-flex items-center gap-5">
           <Image
             src={getImageUrl(brand.logo)}
             alt="Product"
             width={80}
             height={80}
           ></Image>
+          <span>{brand.name}</span>
         </div>
       );
     },

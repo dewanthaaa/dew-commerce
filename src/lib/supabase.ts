@@ -12,3 +12,21 @@ export const getImageUrl = (name: string) => {
 
   return data.publicUrl;
 };
+
+export const uploadFile = async (
+  file: File,
+  path: "brands" | "product" = "brands"
+) => {
+  // contoh : "image/jpg" => image = [0] ; png = [1] => berlaku untuk ekstensi gambar lainnya
+  const fileType = file.type.split("/")[1];
+  const fileName = `${path}-${Date.now()}.${fileType}`;
+
+  await supabase.storage
+    .from("belanja")
+    .upload(`public/${path}/${fileName}`, file, {
+      cacheControl: "3600",
+      upsert: false,
+    });
+
+  return fileName;
+};
