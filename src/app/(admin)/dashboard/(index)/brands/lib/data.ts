@@ -9,3 +9,18 @@ export async function getBrands() {
     return [];
   }
 }
+
+export async function getBrandById(id: string) {
+  try {
+    const brand = await prisma.brand.findFirst({
+      where: {
+        id: Number.parseInt(id),
+      },
+    });
+
+    return brand;
+  } catch (error) {
+    console.log(error);
+    return null;
+  }
+}

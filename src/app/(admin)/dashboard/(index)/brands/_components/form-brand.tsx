@@ -17,19 +17,19 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
-import { postBrand } from "../lib/actions";
+import { postBrand, updateBrand } from "../lib/actions";
 import { AlertCircle } from "lucide-react";
-// import { Category } from "@/generated/prisma";
+import { Brand } from "@/generated/prisma";
 // import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
 const initialState: ActionResult = {
   error: "",
 };
 
-// interface FormBrandProps {
-//   type?: "ADD" | "EDIT";
-//   data?: Category | null;
-// }
+interface FormBrandProps {
+  type?: "ADD" | "EDIT";
+  data?: Brand | null;
+}
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -41,11 +41,14 @@ function SubmitButton() {
   );
 }
 
-export default function FormBrand() {
-  //   const updateCategoryWithId = (_: unknown, formData: FormData) =>
-  //     updateCategory(_, formData, data?.id);
+export default function FormBrand({ data, type }: FormBrandProps) {
+  const updateBrandWithId = (_: unknown, formData: FormData) =>
+    updateBrand(_, formData, data?.id);
 
-  const [state, formAction] = useFormState(postBrand, initialState);
+  const [state, formAction] = useFormState(
+    type === "ADD" ? postBrand : updateBrandWithId,
+    initialState
+  );
 
   return (
     <form action={formAction}>
@@ -97,6 +100,7 @@ export default function FormBrand() {
                         type="text"
                         name="name"
                         className="w-full"
+                        defaultValue={data?.name}
                       />
                     </div>
                     <div className="grid gap-3">
