@@ -2,8 +2,6 @@
 import React from "react";
 import Link from "next/link";
 
-import { ChevronLeft } from "lucide-react";
-
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +17,7 @@ import { ActionResult } from "@/types";
 import { useFormState, useFormStatus } from "react-dom";
 import { postBrand, updateBrand } from "../lib/actions";
 import { AlertCircle } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { Brand } from "@/generated/prisma";
 // import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 
