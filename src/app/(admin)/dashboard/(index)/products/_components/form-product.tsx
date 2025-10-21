@@ -11,12 +11,12 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-// import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { ActionResult } from "@/types";
-import { ChevronLeft } from "lucide-react";
-import { useFormStatus } from "react-dom";
+import { AlertCircle, ChevronLeft } from "lucide-react";
+import { useFormState, useFormStatus } from "react-dom";
 import {
   Select,
   SelectContent,
@@ -25,12 +25,11 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
+import { storeProduct } from "../lib/action";
 
-const initialState: ActionResult = {
+const initialFormState: ActionResult = {
   error: "",
 };
-
-console.log(initialState);
 
 interface FormProductProps {
   children: ReactNode;
@@ -47,8 +46,10 @@ function SubmitButton() {
 }
 
 export default function FormProduct({ children }: FormProductProps) {
+  const [state, formAction] = useFormState(storeProduct, initialFormState);
+
   return (
-    <form action="">
+    <form action={formAction}>
       <div className="grid flex-1 items-start gap-4 p-4 sm:px-6 sm:py-0 md:gap-8">
         <div className="mx-auto grid max-w-[59rem] flex-1 auto-rows-max gap-4">
           <div className="flex items-center gap-4">
@@ -81,13 +82,13 @@ export default function FormProduct({ children }: FormProductProps) {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  {/* {state.error !== "" && (
+                  {state.error !== "" && (
                     <Alert variant="destructive" className="mb-4">
                       <AlertCircle className="h-4 w-4" />
                       <AlertTitle>Error</AlertTitle>
                       <AlertDescription>{state.error}</AlertDescription>
                     </Alert>
-                  )} */}
+                  )}
 
                   <div className="grid gap-6">
                     <div className="grid gap-3">
@@ -102,8 +103,23 @@ export default function FormProduct({ children }: FormProductProps) {
                     </div>
 
                     <div className="grid gap-3">
+                      <Label htmlFor="name">Price</Label>
+                      <Input
+                        id="price"
+                        type="number"
+                        name="price"
+                        className="w-full"
+                        // defaultValue={data?.name}
+                      />
+                    </div>
+
+                    <div className="grid gap-3">
                       <Label htmlFor="description">Description</Label>
-                      <Textarea id="description" className="min-h-32" />
+                      <Textarea
+                        name="description"
+                        id="description"
+                        className="min-h-32"
+                      />
                     </div>
                   </div>
                 </CardContent>
