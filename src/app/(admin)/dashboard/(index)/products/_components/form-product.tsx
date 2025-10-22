@@ -25,7 +25,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { storeProduct } from "../lib/action";
+import { storeProduct, updateProduct } from "../lib/action";
+import { Product } from "@/generated/prisma";
 
 const initialFormState: ActionResult = {
   error: "",
@@ -33,6 +34,8 @@ const initialFormState: ActionResult = {
 
 interface FormProductProps {
   children: ReactNode;
+  type: "ADD" | "EDIT";
+  data?: Product | null;
 }
 
 function SubmitButton() {
@@ -45,8 +48,18 @@ function SubmitButton() {
   );
 }
 
-export default function FormProduct({ children }: FormProductProps) {
-  const [state, formAction] = useFormState(storeProduct, initialFormState);
+export default function FormProduct({
+  children,
+  data,
+  type,
+}: FormProductProps) {
+  const updateProductWithId = (_: unknown, formData: FormData) =>
+    updateProduct(_, formData, data?.id ?? 0);
+
+  const [state, formAction] = useFormState(
+    type === "ADD" ? storeProduct : updateProductWithId,
+    initialFormState
+  );
 
   return (
     <form action={formAction}>
@@ -98,7 +111,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         type="text"
                         name="name"
                         className="w-full"
-                        // defaultValue={data?.name}
+                        defaultValue={data?.name}
                       />
                     </div>
 
@@ -109,7 +122,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         type="number"
                         name="price"
                         className="w-full"
-                        // defaultValue={data?.name}
+                        defaultValue={Number(data?.price ?? 0)}
                       />
                     </div>
 
@@ -119,6 +132,7 @@ export default function FormProduct({ children }: FormProductProps) {
                         name="description"
                         id="description"
                         className="min-h-32"
+                        defaultValue={data?.description}
                       />
                     </div>
                   </div>
@@ -143,7 +157,7 @@ export default function FormProduct({ children }: FormProductProps) {
                   <div className="grid gap-6">
                     <div className="grid gap-3">
                       <Label htmlFor="status">Status</Label>
-                      <Select name="stock">
+                      <Select name="stock" defaultValue={data?.stock}>
                         <SelectTrigger id="status" aria-label="Select status">
                           <SelectValue placeholder="Select status" />
                         </SelectTrigger>

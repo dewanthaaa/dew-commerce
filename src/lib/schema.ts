@@ -68,6 +68,12 @@ export const schemaProduct = z.object({
     ),
 });
 
+export const schemaProductEdit = schemaProduct
+  .extend({
+    id: z.number({ message: "Product Id is Required" }),
+  })
+  .omit({ images: true });
+
 // export const schemaBrand = schemaCategory.extend({
 //   image: z
 //     .any()
