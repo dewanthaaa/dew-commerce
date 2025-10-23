@@ -1,5 +1,5 @@
 "use client";
-import React, { ReactNode } from "react";
+import React, { ReactNode, useState } from "react";
 import Link from "next/link";
 
 import UploadImages from "./upload-images";
@@ -53,13 +53,23 @@ export default function FormProduct({
   data,
   type,
 }: FormProductProps) {
-  const updateProductWithId = (_: unknown, formData: FormData) =>
-    updateProduct(_, formData, data?.id ?? 0);
+  const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+
+  const updateProductWithId = (_: unknown, formData: FormData) => {
+    selectedFiles.forEach((file, index) => {
+      formData.append(`image${index}`, file);
+    });
+    return updateProduct(_, formData, data?.id ?? 0);
+  };
 
   const [state, formAction] = useFormState(
     type === "ADD" ? storeProduct : updateProductWithId,
     initialFormState
   );
+
+  const handleImagesChange = (files: File[]) => {
+    setSelectedFiles(files);
+  };
 
   return (
     <form action={formAction}>
@@ -170,7 +180,10 @@ export default function FormProduct({
                   </div>
                 </CardContent>
               </Card>
-              <UploadImages></UploadImages>
+              <UploadImages
+                existingImages={type === "EDIT" ? data?.images : undefined}
+                onImagesChange={handleImagesChange}
+              ></UploadImages>
             </div>
           </div>
 

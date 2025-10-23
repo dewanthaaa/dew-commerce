@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useRef } from "react";
+import React, { ChangeEvent, useRef, useEffect, useState } from "react";
 import Image from "next/image";
 import {
   Card,
@@ -8,12 +8,36 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Upload } from "lucide-react";
+import { getImageUrl } from "@/lib/supabase";
 
-export default function UploadImages() {
+interface UploadImagesProps {
+  existingImages?: string[];
+  onImagesChange?: (files: File[]) => void;
+}
+
+export default function UploadImages({
+  existingImages,
+  onImagesChange,
+}: UploadImagesProps) {
   const ref = useRef<HTMLInputElement>(null);
-  const thumbnailRef = useRef<HTMLImageElement>(null);
-  const imageFirstRef = useRef<HTMLImageElement>(null);
-  const imageSecondRef = useRef<HTMLImageElement>(null);
+
+  const [previewImages, setPreviewImages] = useState<string[]>([
+    "/placeholder.svg",
+    "/placeholder.svg",
+    "/placeholder.svg",
+  ]);
+
+  useEffect(() => {
+    if (existingImages && existingImages.length > 0) {
+      const initialPreviews = existingImages.map((img) =>
+        getImageUrl(img, "product")
+      );
+      while (initialPreviews.length < 3) {
+        initialPreviews.push("/placeholder.svg");
+      }
+      setPreviewImages(initialPreviews);
+    }
+  }, [existingImages]);
 
   const openFolder = () => {
     if (ref.current) {
@@ -22,18 +46,37 @@ export default function UploadImages() {
   };
 
   const onChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (
-      !thumbnailRef.current ||
-      !imageFirstRef.current ||
-      !imageSecondRef.current
-    ) {
-      return;
-    }
+    // if (
+    //   !thumbnailRef.current ||
+    //   !imageFirstRef.current ||
+    //   !imageSecondRef.current
+    // ) {
+    //   return;
+    // }
 
-    if (e.target.files && e.target.files.length >= 3) {
-      thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
-      imageFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
-      imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
+    //   if (e.target.files && e.target.files.length >= 3) {
+    //     thumbnailRef.current.src = URL.createObjectURL(e.target.files[0]);
+    //     imageFirstRef.current.src = URL.createObjectURL(e.target.files[1]);
+    //     imageSecondRef.current.src = URL.createObjectURL(e.target.files[2]);
+    //   }
+    // };
+
+    if (e.target.files && e.target.files.length > 0) {
+      const newFiles = Array.from(e.target.files);
+      const newPreviewUrls = newFiles.map((file) => URL.createObjectURL(file));
+
+      const updatedPreviews = [...previewImages];
+      newPreviewUrls.forEach((url, index) => {
+        if (index < 3) {
+          updatedPreviews[index] = url;
+        }
+      });
+
+      setPreviewImages(updatedPreviews);
+
+      if (onImagesChange) {
+        onImagesChange(newFiles);
+      }
     }
   };
 
@@ -51,9 +94,9 @@ export default function UploadImages() {
             alt="Product image"
             className="aspect-square w-full rounded-md object-cover"
             height="300"
-            src="/placeholder.svg"
+            src={previewImages[0]}
             width="300"
-            ref={thumbnailRef}
+            // ref={thumbnailRef}
           />
           <div className="grid grid-cols-3 gap-2">
             <button>
@@ -61,9 +104,9 @@ export default function UploadImages() {
                 alt="Product image"
                 className="aspect-square w-full rounded-md object-cover"
                 height="84"
-                src="/placeholder.svg"
+                src={previewImages[1]}
                 width="84"
-                ref={imageFirstRef}
+                // ref={imageFirstRef}
               />
             </button>
             <button>
@@ -71,9 +114,9 @@ export default function UploadImages() {
                 alt="Product image"
                 className="aspect-square w-full rounded-md object-cover"
                 height="84"
-                src="/placeholder.svg"
+                src={previewImages[2]}
                 width="84"
-                ref={imageSecondRef}
+                // ref={imageSecondRef}
               />
             </button>
             <button
@@ -99,3 +142,7 @@ export default function UploadImages() {
     </Card>
   );
 }
+
+// const thumbnailRef = useRef<HTMLImageElement>(null);
+// const imageFirstRef = useRef<HTMLImageElement>(null);
+// const imageSecondRef = useRef<HTMLImageElement>(null);
