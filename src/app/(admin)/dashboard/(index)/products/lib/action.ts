@@ -1,7 +1,7 @@
 "use server";
 
 import { schemaProduct, schemaProductEdit } from "@/lib/schema";
-import { uploadFile } from "@/lib/supabase";
+import { deleteFile, uploadFile } from "@/lib/supabase";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../../lib/prisma";
 import { redirect } from "next/navigation";
@@ -137,5 +137,46 @@ export async function updateProduct(
       error: "Failed to Update Data",
     };
   }
+  return redirect("/dashboard/products");
+}
+
+export async function deleteProduct(
+  _: unknown,
+  formData: FormData,
+  id: number
+): Promise<ActionResult> {
+  const product = await prisma.product.findFirst({
+    where: {
+      id: id,
+    },
+    select: {
+      id: true,
+      images: true,
+    },
+  });
+
+  if (!product) {
+    return {
+      error: "Product is Not Found",
+    };
+  }
+
+  try {
+    for (const image of product.images) {
+      await deleteFile(image, "product");
+    }
+
+    await prisma.product.delete({
+      where: {
+        id: id,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed To Delete Data",
+    };
+  }
+
   return redirect("/dashboard/products");
 }

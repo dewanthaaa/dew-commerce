@@ -8,6 +8,7 @@ import { rupiahFormat } from "@/lib/utils";
 import { ColumnDef } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
 import { Edit } from "lucide-react";
+import FormDelete from "./_components/form-delete";
 
 export type TColumn = {
   id: number;
@@ -76,7 +77,7 @@ export const columns: ColumnDef<TColumn>[] = [
               Edit
             </Link>
           </Button>
-          {/* <FormDelete id={product.id} /> */}
+          <FormDelete id={product.id} />
         </div>
       );
     },
