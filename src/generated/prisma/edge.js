@@ -219,7 +219,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\Users\\Dewantha\\Documents\\dew-commerce\\src\\generated\\prisma",
+      "value": "/home/dewantha/Projects/dew-commerce/src/generated/prisma",
       "fromEnvVar": null
     },
     "config": {
@@ -228,12 +228,12 @@ const config = {
     "binaryTargets": [
       {
         "fromEnvVar": null,
-        "value": "windows",
+        "value": "debian-openssl-3.0.x",
         "native": true
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\Users\\Dewantha\\Documents\\dew-commerce\\prisma\\schema.prisma",
+    "sourceFilePath": "/home/dewantha/Projects/dew-commerce/prisma/schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -247,7 +247,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
