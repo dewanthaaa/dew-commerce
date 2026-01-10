@@ -8,21 +8,22 @@ import {
 } from "@/components/ui/card";
 import { DataTable } from "@/components/ui/data-table";
 import { columns } from "./columns";
-import { getOrders } from "./lib/data";
+import { getCustomers } from "./lib/data";
 
-export default async function OrdersPage() {
-  const orders = await getOrders();
+export default async function CustomersPage() {
+  const customers = await getCustomers();
+
   return (
     <div className="space-y-4">
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
-          <CardTitle>Orders</CardTitle>
+          <CardTitle>Customers</CardTitle>
           <CardDescription>
-            Manage your orders and view their sales performance.
+            Manage your customers and view their sales performance.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <DataTable columns={columns} data={orders}></DataTable>
+          <DataTable columns={columns} data={customers}></DataTable>
         </CardContent>
       </Card>
     </div>
