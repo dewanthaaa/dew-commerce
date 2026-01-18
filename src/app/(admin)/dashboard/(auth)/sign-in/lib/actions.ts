@@ -26,6 +26,7 @@ export async function SignIn(
   const existingUser = await prisma.user.findFirst({
     where: {
       email: validate.data.email,
+      role: "superadmin"
     },
   });
 
