@@ -54,5 +54,5 @@ export async function SignIn(
     sessionCookie.attributes
   );
 
-  return redirect("/dashboard");
+  return redirect("/");
 }
