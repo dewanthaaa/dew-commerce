@@ -1,5 +1,6 @@
-"use server"
+"use server";
 import { schemaSignIn } from "@/lib/schema";
+import { schemaSignUp } from "@/lib/schema";
 import { ActionResult } from "@/types";
 import prisma from "../../../../../../lib/prisma";
 import bcrypt from "bcrypt";
@@ -9,7 +10,7 @@ import { redirect } from "next/navigation";
 
 export async function SignIn(
   _: unknown,
-  formData: FormData
+  formData: FormData,
 ): Promise<ActionResult> {
   const validate = schemaSignIn.safeParse({
     email: formData.get("email"),
@@ -37,7 +38,7 @@ export async function SignIn(
   }
   const comparePassword = bcrypt.compareSync(
     validate.data.password,
-    existingUser.password
+    existingUser.password,
   );
 
   if (!comparePassword) {
@@ -51,8 +52,55 @@ export async function SignIn(
   cookies().set(
     sessionCookie.name,
     sessionCookie.value,
-    sessionCookie.attributes
+    sessionCookie.attributes,
   );
 
   return redirect("/");
+}
+
+export async function SignUp(
+  _: unknown,
+  formData: FormData,
+): Promise<ActionResult> {
+  const validate = schemaSignUp.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validate.success) {
+    console.log(validate);
+    return {
+      error: validate.error.issues[0].message,
+    };
+  }
+
+  const existingUser = await prisma.user.findUnique({
+    where: { email: validate.data.email, role: "customer" },
+  });
+
+  if (existingUser) {
+    return {
+      error: "User already exists",
+    };
+  }
+
+  const hashPassword = bcrypt.hashSync(validate.data.password, 12);
+  try {
+    await prisma.user.create({
+      data: {
+        name: validate.data.name,
+        email: validate.data.email,
+        password: hashPassword,
+        role: "customer",
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    return {
+      error: "Failed to sign up",
+    };
+  }
+
+  return redirect("/sign-in");
 }

@@ -11,6 +11,18 @@ export const schemaSignIn = z.object({
     .min(5, { message: "Password must be at least 6 characters" }),
 });
 
+export const schemaSignUp = z.object({
+  name: z
+    .string({ error: "Name is required" })
+    .min(5, { message: "Name should have at least 5 characters" }),
+  email: z
+    .string({ error: "Email is required" })
+    .email({ message: "Invalid email address" }),
+  password: z
+    .string({ error: "Password is required" })
+    .min(5, { message: "Password must be at least 6 characters" }),
+});
+
 export const schemaCategory = z.object({
   name: z
     .string({ error: "Category Name is Required" })
@@ -64,7 +76,7 @@ export const schemaProduct = z.object({
       },
       {
         message: "Uploaded file should image",
-      }
+      },
     ),
 });
 
